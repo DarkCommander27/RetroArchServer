@@ -1,2 +1,2 @@
 # RetroArchServer
-Retroarch Server for ROMs and Game Assets
+RetroArch Server for ROMs and Game Assets built on the official RetroArch buildbot structure.
