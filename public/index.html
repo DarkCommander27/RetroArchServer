@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>RetroArch Server</title>
+    <link rel="stylesheet" href="/styles.css">
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="hero">
+        <p class="eyebrow">RetroArch Library</p>
+        <h1>Playlists, thumbnails, and launch commands in one local server.</h1>
+        <p class="lede">
+          This server reads RetroArch JSON playlists, matches thumbnails with RetroArch naming rules,
+          and exposes a browser view plus a small JSON API for your laptop library.
+        </p>
+      </header>
+
+      <main>
+        <section class="summary" id="summary"></section>
+        <p id="status" class="status" hidden></p>
+        <section class="control-grid">
+          <article class="control-card">
+            <h2>Create playlist</h2>
+            <form id="create-playlist-form" class="stacked-form">
+              <label>
+                <span>Playlist name</span>
+                <input id="create-playlist-name" name="name" type="text" placeholder="Nintendo - Game Boy Advance" required>
+              </label>
+              <button type="submit">Create</button>
+            </form>
+          </article>
+
+          <article class="control-card">
+            <h2>Import playlist</h2>
+            <form id="import-playlist-form" class="stacked-form">
+              <label>
+                <span>RetroArch `.lpl` file</span>
+                <input name="playlist" type="file" accept=".lpl,application/json" required>
+              </label>
+              <button type="submit">Upload playlist</button>
+            </form>
+          </article>
+
+          <article class="control-card control-card-wide">
+            <h2>Upload ROM and add to playlist</h2>
+            <form id="upload-rom-form" class="stacked-form two-column-form">
+              <label>
+                <span>Playlist</span>
+                <select id="upload-rom-playlist" name="playlistName" required></select>
+              </label>
+              <label>
+                <span>Display label</span>
+                <input name="label" type="text" placeholder="Tetris (USA)">
+              </label>
+              <label>
+                <span>ROM file</span>
+                <input name="rom" type="file" required>
+              </label>
+              <label>
+                <span>Relative folder</span>
+                <input name="relativeDirectory" type="text" placeholder="roms/Nintendo - Game Boy">
+              </label>
+              <label>
+                <span>Core path</span>
+                <input name="corePath" type="text" placeholder="DETECT">
+              </label>
+              <label>
+                <span>Core name</span>
+                <input name="coreName" type="text" placeholder="DETECT">
+              </label>
+              <label>
+                <span>CRC32</span>
+                <input name="crc32" type="text" placeholder="DETECT">
+              </label>
+              <button type="submit">Import ROM</button>
+            </form>
+          </article>
+
+          <article class="control-card control-card-wide">
+            <h2>Sync official RetroArch assets</h2>
+            <div class="sync-panels">
+              <form id="sync-frontend-form" class="stacked-form">
+                <p class="control-copy">Download current frontend asset packs from the Libretro buildbot and extract them into your local RetroArch root.</p>
+                <div id="frontend-pack-list" class="checkbox-grid"></div>
+                <button type="submit">Sync frontend assets</button>
+              </form>
+
+              <form id="sync-thumbnails-form" class="stacked-form">
+                <p class="control-copy">Mirror playlist artwork from the official thumbnail server so the library stays usable offline.</p>
+                <label>
+                  <span>Playlist scope</span>
+                  <select id="thumbnail-playlist-select" name="playlistName"></select>
+                </label>
+                <div id="thumbnail-kind-list" class="checkbox-grid"></div>
+                <button type="submit">Sync thumbnails</button>
+              </form>
+            </div>
+          </article>
+        </section>
+        <section class="toolbar">
+          <input id="search" type="search" placeholder="Filter playlists or game names">
+        </section>
+        <section id="playlists" class="playlist-grid"></section>
+      </main>
+    </div>
+
+    <template id="playlist-template">
+      <article class="playlist-card">
+        <header class="playlist-header">
+          <div>
+            <h2></h2>
+            <p class="meta"></p>
+          </div>
+          <div class="playlist-actions">
+            <button class="playlist-add-entry" type="button">Add entry</button>
+            <button class="playlist-sync-thumbnails" type="button">Sync thumbnails</button>
+          </div>
+        </header>
+        <div class="entries"></div>
+      </article>
+    </template>
+
+    <template id="entry-template">
+      <article class="entry-card">
+        <img class="cover" alt="">
+        <div class="details">
+          <h3></h3>
+          <p class="core"></p>
+          <p class="path"></p>
+          <div class="actions">
+            <a class="download-link" target="_blank" rel="noreferrer">ROM</a>
+            <button class="launch-button" type="button">Launch command</button>
+            <button class="edit-entry-button" type="button">Edit</button>
+            <button class="remove-entry-button" type="button">Remove</button>
+          </div>
+          <pre class="launch-command" hidden></pre>
+        </div>
+      </article>
+    </template>
+
+    <script src="/app.js" defer></script>
+  </body>
+</html>
